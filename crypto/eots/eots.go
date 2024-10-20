@@ -65,6 +65,11 @@ func signHash(sk *PrivateKey, privateRand *PrivateRand, hash [32]byte) (*Signatu
 		return nil, signatureError(ecdsa_schnorr.ErrPrivateKeyIsZero, str)
 	}
 
+	// Check if nonce is zero
+    if privateRand.IsZero() {
+        return nil, errors.New("nonce (privateRand) is zero")
+    }
+
 	// d' = int(d)
 	var privKeyScalar ModNScalar
 	privKeyScalar.Set(&sk.Key)
